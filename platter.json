@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "components": [
+    {
+      "type": "api",
+      "path": "./components/api",
+      "build": [
+        "yarn"
+      ],
+      "start": "yarn dev"
+    },
+    {
+      "type": "web",
+      "path": "./components/web",
+      "build": [
+        "yarn"
+      ],
+      "start": "yarn start"
+    },
+    {
+      "type": "data",
+      "path": "./components/data"
+    }
+  ]
+}
