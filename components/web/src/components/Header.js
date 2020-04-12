@@ -13,6 +13,7 @@ const StyledHeader = styled.header`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  z-index: 1024;
 `
 
 const H1 = styled.h1`
