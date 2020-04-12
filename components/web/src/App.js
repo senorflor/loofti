@@ -8,6 +8,7 @@ import {
 import Footer from './components/Footer'
 import Header from './components/Header'
 import Hero from './components/Hero'
+import Plan from './components/Plan'
 
 const App = () => 
   <Router>
@@ -17,8 +18,14 @@ const App = () =>
         <Hero />
         <Footer />
       </Route>
+      <Route exact path='/about/team'>
+        <div>ABOUT</div>
+      </Route>
+      <Route exact path='/about/app'>
+        <div>ABOUT APP</div>
+      </Route>
       <Route path='/p/'>
-        <div>PLAN</div>
+        <Plan />
       </Route>
       <Route path='/b/'>
         <div>Biz</div>

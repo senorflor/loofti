@@ -1,7 +1,4 @@
 import React, { useState } from 'react'
-import {
-  Redirect
-} from 'react-router-dom'
 import styled from 'styled-components'
 import { default as Slider } from 'react-swipeable-views'
 
