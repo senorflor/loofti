@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import {
+  Redirect
+} from 'react-router-dom'
 import styled from 'styled-components'
 import { default as Slider } from 'react-swipeable-views'
 
@@ -31,10 +34,12 @@ const PreviewCard = styled.div`
   border-radius: 2px;
 
   background: white;
-  padding: 1.5rem;
+  padding: 1.3rem;
   & > p {
+    font-size: 0.95rem;
     color: #444;
     text-align: left;
+    line-height: 1.4;
   }
 `
 
@@ -69,7 +74,7 @@ const DemoGallery = () => {
         <PreviewCard>
           <H4>That&rsquo;s it!</H4>
           <p>No sign up or account needed. See you out there when it&rsquo;s safe again!</p>
-          <button type='button'>Get started</button>
+          <button type='button' onClick={() => window.location = '/p'}>Get started</button>
         </PreviewCard>
       </StyledSlider>
       {

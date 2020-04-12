@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import media from 'styled-media-query'
 import styled from 'styled-components'
 
@@ -29,11 +30,24 @@ const H1 = styled.h1`
   `}
 `
 
+const NavLink = styled(Link)`
+  margin: 0 2rem;
+  font-size: 2rem;
+  text-decoration: none;
+  ${media.lessThan('medium')`
+    font-size: 2rem;
+  `}
+  ${media.lessThan('small')`
+    margin: 0 1rem;
+    font-size: 1.8rem;
+  `}
+`
+
 const Header = () => (
   <StyledHeader>
-    <H1>🔍</H1>
+    <NavLink to='/'>🏡</NavLink>
     <H1>Loofti</H1>
-    <H1>🍔</H1>
+    <NavLink to='/p'>🗺️</NavLink>
   </StyledHeader>
 )
 

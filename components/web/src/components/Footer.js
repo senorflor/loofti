@@ -1,4 +1,7 @@
 import React from 'react'
+import {
+  Link
+} from 'react-router-dom'
 import media from 'styled-media-query'
 import styled from 'styled-components'
 
@@ -45,17 +48,24 @@ const H3 = styled.h3`
   font-size: 1.2rem;
 `
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  &, &:hover, &:visited, &:focus {
+    color: #111;
+  }
+`
+
 const Footer = () => (
   <StyledFooter>
     <LeftCol>
       <H3>About</H3>
-      <p>Who&rsquo;s behind this?</p>
-      <p>Why?</p>
+      <p><StyledLink to='/a/team'>Who&rsquo;s behind this?</StyledLink></p>
+      <p><StyledLink to='/a/app'>Why?</StyledLink></p>
     </LeftCol>
     <RightCol>
       <H3>Get involved</H3>
-      <p>Claim your listing</p>
-      <p>Add a local business</p>
+      <p><StyledLink to='/b/claim'>Claim your listing</StyledLink></p>
+      <p><StyledLink to='/b/add'>Add a local business</StyledLink></p>
     </RightCol>
     <Copyright>
       <small>&copy; 2020 Boilerplatter, Inc. All rights reserved.</small>
