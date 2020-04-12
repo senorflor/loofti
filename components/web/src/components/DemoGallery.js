@@ -15,7 +15,9 @@ const HackySlideNav = styled.div`
   justify-content: center;
   cursor: pointer;
   font-family: 'Sigmar One', sans-serif;
+  font-size: 2rem;
   color: white;
+  text-shadow: 2px 2px 1px black;
 `
 
 const StyledSlider = styled(Slider)`
@@ -50,7 +52,7 @@ const DemoGallery = () => {
           onClick={() => {
             setSlide(Math.max(0, slide-1))
           }}>
-          {'<'}
+          {'<\xa0'}
         </HackySlideNav> : <div></div>
       }
       <StyledSlider className='gallery' index={slide} enableMouseEvents={true} onChangeIndex={setSlide}>
@@ -75,7 +77,7 @@ const DemoGallery = () => {
           onClick={() => {
             setSlide(Math.min(slide+1, 2))
           }}>
-          {'>'}
+          {'\xa0>'}
         </HackySlideNav> : <div></div>
       }
     </GalleryGrid>
