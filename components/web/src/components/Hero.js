@@ -49,7 +49,7 @@ const Hero = () => {
   
   return (
     <StyledHero>
-      <H2>Plan Fun For Later<br/>
+      <H2>Make Plans For Later<br/>
       <span className="urgent">Help Local Businesses Now</span></H2>
       <P><strong>Loofti</strong> (short for <strong>Loo</strong>king <strong>f</strong>orward <strong>t</strong>o <strong>i</strong>t) helps you support local businesses now by making fun plans with friends for later.</P>
 
