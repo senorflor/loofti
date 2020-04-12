@@ -3,7 +3,7 @@ import media from 'styled-media-query'
 import styled from 'styled-components'
 
 const StyledFooter = styled.footer`
-  background: #eaeaea;
+  background: #fcea22;
   display: grid;
   grid-template-columns: auto 300px 300px auto;
   grid-template-rows: auto 40px 10px;

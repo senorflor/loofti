@@ -8,7 +8,7 @@ const StyledHeader = styled.header`
   left: 0;
   right: 0;
   height: 64px;
-  background: #eaeaea;
+  background: #fcea22;
   display: flex;
   flex-direction: row;
   align-items: center;
