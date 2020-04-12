@@ -18,24 +18,32 @@ const StyledHero = styled.div`
 `
 
 const H2 = styled.h2`
-  font-size: calc(2.5rem + 1.5vw);
-  font-family: Avenir;
-  font-weight: 900;
+  font-size: calc(2.8rem + 1.5vw);
   color: #111;
-  letter-spacing: -0.02rem;
+  letter-spacing: -0.15rem;
   ${media.lessThan('medium')`
     font-size: 2.3rem
-`}
+  `}
   ${media.lessThan('small')`
     font-size: 1.7rem
   `}
+  & > .urgent {
+    font-style: italic;
+    letter-spacing: -0.12rem;
+  }
+`
+
+const P = styled.p`
+  text-align: left;
 `
 
 const Hero = () => (
   <StyledHero>
-    <H2>Make Plans Now<br/>
-    To Get Out Later</H2>
-    <p>Loofti (short for Looking Forward To It) helps you support local businesses by making plans with friends, now.</p>
+    <H2>Plan Fun For Later<br/>
+    <span className="urgent">Help Local Businesses Now</span></H2>
+    <P><strong>Loofti</strong> (short for <strong>Loo</strong>king <strong>f</strong>orward <strong>t</strong>o <strong>i</strong>t) helps you support local businesses now by making fun plans with friends for later.</P>
+
+    <p>How it works:</p>
 
 
     <h3>TODO: Pick stops and make plans</h3>

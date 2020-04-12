@@ -17,19 +17,21 @@ const StyledHeader = styled.header`
 
 const H1 = styled.h1`
   margin: 0 2rem;
+  font-family: 'Damion', sans-serif;
+
   ${media.lessThan('medium')`
-    font-size: 1.5rem
+    font-size: 2rem;
   `}
   ${media.lessThan('small')`
     margin: 0 1rem;
-    font-size: 1.5rem
+    font-size: 1.8rem;
   `}
 `
 
 const Header = () => (
   <StyledHeader>
     <H1>🔍</H1>
-    <H1>🏘️&nbsp;Loofti.com</H1>
+    <H1>Loofti</H1>
     <H1>🍔</H1>
   </StyledHeader>
 )
