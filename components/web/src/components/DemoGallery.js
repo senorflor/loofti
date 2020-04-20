@@ -64,8 +64,13 @@ const DemoGallery = () => {
         </PreviewCard>
 
         <PreviewCard>
-          <H4>Support local businesses</H4>
-          <p>Loofti lets you and your friends buy gift cards and shop online now to help support the merchants you&rsquo;ve made plans with. You can subscribe to get weekly updates about your favorites.</p>
+          <H4>Support local businesses now</H4>
+          <p>Loofti lets you and your friends buy gift cards and shop online now to help support the merchants you&rsquo;ve made plans with.</p>
+        </PreviewCard>
+
+        <PreviewCard>
+          <H4>Get out and enjoy when safe again</H4>
+          <p>We'll keep you and your friends up to date about reopening schedules, including exclusive specials and events for loofti.com supporters!</p>
         </PreviewCard>
 
         <PreviewCard>
@@ -75,9 +80,9 @@ const DemoGallery = () => {
         </PreviewCard>
       </StyledSlider>
       {
-        (slide < 2) ? <HackySlideNav
+        (slide < 3) ? <HackySlideNav
           onClick={() => {
-            setSlide(Math.min(slide+1, 2))
+            setSlide(Math.min(slide+1, 3))
           }}>
           {'\xa0>'}
         </HackySlideNav> : <div></div>
