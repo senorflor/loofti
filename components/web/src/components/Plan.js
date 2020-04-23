@@ -25,19 +25,16 @@ const PlanInput = styled.input`
   border: none;
 `
 
-const MapContainer = GoogleApiWrapper({
-  apiKey: 'AIzaSyDnFZqXt3syTQIu2OsgxUGuXAcj7xHATRM'
-})(
-  (props) => {
-    return (
-      <Map
-        google={props.google}
-        center={props.center}
-        initialCenter={props.center}
-        containerStyle={mapStyles}>
-      </Map>
-    )
-})
+const MapContainer = (props) => {
+  return (
+    <Map
+      google={window.google}
+      initialCenter={props.center}
+      center={props.center}
+      containerStyle={mapStyles}>
+    </Map>
+  )
+}
 
 const SuggestionList = styled.ul`
   position: absolute;
