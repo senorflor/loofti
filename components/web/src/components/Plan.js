@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
-import { Map, GoogleApiWrapper } from 'google-maps-react';
+import { Map } from 'google-maps-react';
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete'
 
 const mapStyles = {
@@ -31,7 +31,9 @@ const MapContainer = (props) => {
       google={window.google}
       initialCenter={props.center}
       center={props.center}
-      containerStyle={mapStyles}>
+      containerStyle={mapStyles}
+      mapTypeControl={false}
+      streetViewControl={false}>
     </Map>
   )
 }
