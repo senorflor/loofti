@@ -47,8 +47,8 @@ const SuggestionList = styled.ul`
   text-align: left;
   background: white;
   list-style: none;
-  & > li {
-    
+  &:hover {
+    cursor: pointer;
   }
 `
 
