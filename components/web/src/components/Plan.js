@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Map } from 'google-maps-react';
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete'
@@ -12,7 +12,7 @@ const mapStyles = {
 
 const PlanDiv = styled.div`
   margin-top: 64px;
-  height: calc(100vh - 64px);
+  height: ${({ height }) => height - 64}px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -73,6 +73,25 @@ const Plan = (props) => {
     lng: -95.2604155
   })
 
+  const [height, setHeight] = useState(
+    document.documentElement.clientHeight
+  )
+
+  useEffect(() => {
+    const handleHeightChange = () => {
+      console.log(document.documentElement.clientHeight)
+      setHeight(document.documentElement.clientHeight)
+    }
+    window.addEventListener('resize', handleHeightChange)
+    window.addEventListener('orientationchange', handleHeightChange)
+    return () => {
+      window.removeEventListener('resize', handleHeightChange)
+      window.removeEventListener('orientationchange', handleHeightChange)
+    }
+  }
+
+  )
+
   const handleInput = e => {
     // Update the keyword of the input element
     setValue(e.target.value);
@@ -107,7 +126,7 @@ const Plan = (props) => {
       )
     })
   return (
-    <PlanDiv>
+    <PlanDiv height={height}>
       <label htmlFor='destination'>Where to when we can get out again?</label>
       <br />
       
