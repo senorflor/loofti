@@ -7,7 +7,7 @@ const mapStyles = {
   position: 'relative',
   marginTop: '1rem',
   width: '80vw',
-  height: '65vh',
+  height: '60vh',
 }
 
 const PlanDiv = styled.div`
@@ -22,6 +22,7 @@ const PlanDiv = styled.div`
 
 const PlanInput = styled.input`
   width: 300px;
+  max-width: 90%;
   border: none;
 `
 
@@ -42,6 +43,7 @@ const SuggestionList = styled.ul`
   position: absolute;
   z-index: 100;
   width: 298px;
+  max-width: 89%
   margin: 0;
   padding: 0.2em;
   text-align: left;
