@@ -39,9 +39,7 @@ const Plan = (props) => {
       window.removeEventListener('resize', handleHeightChange)
       window.removeEventListener('orientationchange', handleHeightChange)
     }
-  }
-
-  )
+  })
 
   const handleInput = e => {
     // Update the keyword of the input element
@@ -81,6 +79,7 @@ const Plan = (props) => {
         </li>
       )
     })
+
   return (
     <PlanDiv height={height}>
       <label htmlFor='destination'>Where to when we can get out again?</label>
@@ -94,7 +93,9 @@ const Plan = (props) => {
           placeholder="I'll visit..."
           id='destination'
         />
-        {status === 'OK' && <SuggestionList>{renderSuggestions()}</SuggestionList>}
+        {status === 'OK' && <SuggestionList>
+          {renderSuggestions()}
+        </SuggestionList>}
       </div>
       <CitySelectionMap
         center={center}
