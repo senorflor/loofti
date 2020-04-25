@@ -48,6 +48,7 @@ const MapContainer = ({
       onIdle={handleMapMoved}> 
         <InfoWindowEx visible={true} position={center}>
           <>
+          <p>Looks good. Ready to go?</p>
           <button type='button' onClick={handleCancel}>❌ Cancel</button> 
           <button type='button' onClick={handleConfirm}>✅ Let's go!</button>
           </>
@@ -55,8 +56,6 @@ const MapContainer = ({
     </Map>
   )
 }
-
-
 
 const Plan = (props) => {
   const {
@@ -74,6 +73,7 @@ const Plan = (props) => {
     debounce: 333,
   })
 
+  // homeSweetHome[0]
   const [center, setCenter] = useState({
     lat: 38.9613795,
     lng: -95.2604155
