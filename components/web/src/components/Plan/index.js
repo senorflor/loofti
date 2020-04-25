@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import ReactDOM from 'react-dom'
-import { Map, InfoWindow } from 'google-maps-react'
+import { Map } from 'google-maps-react'
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete'
-import { PlanDiv, PlanInput, SuggestionList } from './styled'
+import { EmojiButton, PlanDiv, PlanInput, SuggestionList } from './styled'
+import InfoWindow from './InfoWindow'
 
 const mapStyles = {
   position: 'relative',
@@ -11,14 +11,14 @@ const mapStyles = {
   height: '60vh',
 }
 
-const InfoWindowEx = (props) => {
-  const infoWindowRef = React.createRef();
-  const contentElement = document.createElement(`div`);
-  useEffect(() => {
-    ReactDOM.render(React.Children.only(props.children), contentElement);
-    infoWindowRef.current.infowindow.setContent(contentElement);
-  }, [props.children]);
-  return <InfoWindow ref={infoWindowRef} {...props} />;
+// Jankily ensure we don't end up in an update loop of map position because the
+// InfoWindow overflows to keep pushing map center out in very small screens
+// (e.g. mobile browser when keyboard pops). TODO(senorflor): better responsive
+// layout handling :)
+const updateTimestamps = (timestamps, now) => {
+  return timestamps.filter(
+    ts => Math.abs(now - ts) < 1000
+  ).concat(now)
 }
 
 const MapContainer = ({
@@ -27,14 +27,20 @@ const MapContainer = ({
   handleConfirm,
   setNewCenter,
 }) => {
-  const handleMapMoved = (mapProps, theMap) => {
+  const [recentMoveTimestamps, setTimestamps]  = useState([])
+  const handleMapMoved = (_, theMap) => {
     const { lat: oldLat, lng: oldLng } = center
     const newCenter = {
       lat: theMap.center.lat(),
       lng: theMap.center.lng(),
     }
     if (oldLat != newCenter.lat || oldLng != newCenter.lng) {
-      setNewCenter(newCenter)
+      setTimestamps(
+        updateTimestamps(recentMoveTimestamps, Date.now())
+      )
+      if (recentMoveTimestamps.length < 2) {
+        setNewCenter(newCenter)
+      }
     }
   }
   return (
@@ -46,13 +52,12 @@ const MapContainer = ({
       mapTypeControl={false}
       streetViewControl={false}
       onIdle={handleMapMoved}> 
-        <InfoWindowEx visible={true} position={center}>
+        <InfoWindow visible={true} position={center}>
           <>
-          <p>Looks good. Ready to go?</p>
-          <button type='button' onClick={handleCancel}>❌ Cancel</button> 
-          <button type='button' onClick={handleConfirm}>✅ Let's go!</button>
+          <EmojiButton type='button' onClick={handleCancel}>❌ Cancel</EmojiButton> 
+          <EmojiButton type='button' onClick={handleConfirm}>✅ Let's go!</EmojiButton>
           </>
-        </InfoWindowEx>
+        </InfoWindow>
     </Map>
   )
 }

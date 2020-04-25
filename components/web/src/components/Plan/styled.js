@@ -30,3 +30,7 @@ export const SuggestionList = styled.ul`
     cursor: pointer;
   }
 `
+
+export const EmojiButton = styled.button`
+  padding: 0.35rem;
+`
