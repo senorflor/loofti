@@ -11,7 +11,6 @@ const mapStyles = {
   height: '60vh',
 }
 
-
 const InfoWindowEx = (props) => {
   const infoWindowRef = React.createRef();
   const contentElement = document.createElement(`div`);
@@ -35,7 +34,6 @@ const MapContainer = ({
       lng: theMap.center.lng(),
     }
     if (oldLat != newCenter.lat || oldLng != newCenter.lng) {
-      console.log(newCenter)
       setNewCenter(newCenter)
     }
   }
@@ -87,7 +85,6 @@ const Plan = (props) => {
 
   useEffect(() => {
     const handleHeightChange = () => {
-      console.log(document.documentElement.clientHeight)
       setHeight(document.documentElement.clientHeight)
     }
     window.addEventListener('resize', handleHeightChange)
