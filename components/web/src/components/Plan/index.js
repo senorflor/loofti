@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { Map } from 'google-maps-react';
+import ReactDOM from 'react-dom'
+import { Map, InfoWindow } from 'google-maps-react'
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete'
+import { PlanDiv, PlanInput, SuggestionList } from './styled'
 
 const mapStyles = {
   position: 'relative',
@@ -10,49 +11,54 @@ const mapStyles = {
   height: '60vh',
 }
 
-const PlanDiv = styled.div`
-  margin-top: 64px;
-  height: ${({ height }) => height - 64}px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`
 
-const PlanInput = styled.input`
-  width: 300px;
-  max-width: 90%;
-  border: none;
-`
+const InfoWindowEx = (props) => {
+  const infoWindowRef = React.createRef();
+  const contentElement = document.createElement(`div`);
+  useEffect(() => {
+    ReactDOM.render(React.Children.only(props.children), contentElement);
+    infoWindowRef.current.infowindow.setContent(contentElement);
+  }, [props.children]);
+  return <InfoWindow ref={infoWindowRef} {...props} />;
+}
 
-const MapContainer = (props) => {
+const MapContainer = ({
+  center,
+  handleCancel,
+  handleConfirm,
+  setNewCenter,
+}) => {
+  const handleMapMoved = (mapProps, theMap) => {
+    const { lat: oldLat, lng: oldLng } = center
+    const newCenter = {
+      lat: theMap.center.lat(),
+      lng: theMap.center.lng(),
+    }
+    if (oldLat != newCenter.lat || oldLng != newCenter.lng) {
+      console.log(newCenter)
+      setNewCenter(newCenter)
+    }
+  }
   return (
     <Map
       google={window.google}
-      initialCenter={props.center}
-      center={props.center}
+      initialCenter={center}
+      center={center}
       containerStyle={mapStyles}
       mapTypeControl={false}
-      streetViewControl={false}>
+      streetViewControl={false}
+      onIdle={handleMapMoved}> 
+        <InfoWindowEx visible={true} position={center}>
+          <>
+          <button type='button' onClick={handleCancel}>❌ Cancel</button> 
+          <button type='button' onClick={handleConfirm}>✅ Let's go!</button>
+          </>
+        </InfoWindowEx>
     </Map>
   )
 }
 
-const SuggestionList = styled.ul`
-  position: absolute;
-  z-index: 100;
-  width: 298px;
-  max-width: 89%
-  margin: 0;
-  padding: 0.2em;
-  text-align: left;
-  background: white;
-  list-style: none;
-  &:hover {
-    cursor: pointer;
-  }
-`
+
 
 const Plan = (props) => {
   const {
@@ -111,6 +117,11 @@ const Plan = (props) => {
         console.log('Error geolocating: ', error)
       })
   }
+
+  const setNewCenter = (newCenter) => {
+    setCenter(newCenter)
+  }
+
   const renderSuggestions = () =>
     data.map(suggestion => {
       const {
@@ -142,7 +153,12 @@ const Plan = (props) => {
         />
         {status === 'OK' && <SuggestionList>{renderSuggestions()}</SuggestionList>}
       </div>
-      <MapContainer center={center}/>
+      <MapContainer
+        center={center}
+        handleCancel={() => { console.log('NO') }}
+        handleConfirm={() => { console.log('YES')}}
+        setNewCenter={setNewCenter}
+      />
     </PlanDiv>
   )
 }
