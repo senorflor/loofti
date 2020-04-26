@@ -8,7 +8,7 @@ const mapStyles = {
   position: 'relative',
   marginTop: '1rem',
   width: '80vw',
-  maxHeight: '60vh',
+  maxHeight: '50vh',
 }
 
 // Jankily ensure we don't end up in an update loop of map position because the
