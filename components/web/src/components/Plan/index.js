@@ -1,7 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete'
 import {  PlanDiv, PlanInput, SuggestionList } from './styled'
 import CitySelectionMap from './CitySelectionMap'
+import SelectedCity from './SelectedCity'
+
+const homeSweetHome = {
+  lat: 38.9613795,
+  lng: -95.2604155
+}
 
 const Plan = (props) => {
   const {
@@ -19,15 +25,16 @@ const Plan = (props) => {
     debounce: 333,
   })
 
-  // homeSweetHome[0]
-  const [center, setCenter] = useState({
-    lat: 38.9613795,
-    lng: -95.2604155
-  })
+  const [center, setCenter] = useState(homeSweetHome)
 
   const [height, setHeight] = useState(
     document.documentElement.clientHeight
   )
+
+  const mapRef = useRef(null)
+  const [infoVisible, setInfoVisible] = useState(null)
+  const [citySelected, setCitySelected] = useState(null)
+  const [friendsSelected, setFriendsSelected] = useState(null)
 
   useEffect(() => {
     const handleHeightChange = () => {
@@ -39,7 +46,55 @@ const Plan = (props) => {
       window.removeEventListener('resize', handleHeightChange)
       window.removeEventListener('orientationchange', handleHeightChange)
     }
-  })
+  }, [])
+
+  const geoService = useRef()
+  useEffect(() => {
+    const getClosestCity = () => {
+      if (!geoService.current) {
+        geoService.current = new window.google.maps.Geocoder
+      }
+      if (center == homeSweetHome) {
+        return
+      }
+      geoService.current.geocode({
+        location: center,
+      }, (res) => {
+        if (res?.length) {
+          const closest = res[0]
+          const city = closest.address_components.filter(
+            ac => ac.types.includes('locality')
+          )[0].long_name
+          const state = closest.address_components.filter(
+            ac => ac.types.includes('administrative_area_level_1')
+          )[0].short_name
+          const nation = closest.address_components.filter(
+            ac => ac.types.includes('country')
+          )[0].long_name
+          geoService.current.geocode({
+            address: `${city}, ${state}, ${nation}`,
+          }, (res) => {
+            if (res?.length) {
+              const localities = res.filter(
+                r => r.types.includes('locality')
+              )
+              if (localities.length) {
+                setValue(
+                  localities[0].formatted_address,
+                  false
+                )
+              }
+            }
+          })
+        }
+      })
+    }
+    getClosestCity()
+  }, [center])
+
+  const handleToggleInfoVisibility = (isVisible) => {
+    setInfoVisible(isVisible)
+  }
 
   const handleInput = e => {
     // Update the keyword of the input element
@@ -54,9 +109,17 @@ const Plan = (props) => {
       .then(results => getLatLng(results[0]))
       .then((coords) => {
         setCenter(coords)
+        setInfoVisible(true)
       }).catch(error => {
         console.log('Error geolocating: ', error)
       })
+  }
+
+  const handleConfirm = () => {
+    setCitySelected({
+      displayName: value,
+      center,
+    })
   }
 
   const setNewCenter = (newCenter) => {
@@ -82,28 +145,32 @@ const Plan = (props) => {
 
   return (
     <PlanDiv height={height}>
-      <label htmlFor='destination'>Where to when we can get out again?</label>
-      <br />
-      
-      <div>
-        <PlanInput
-          value={value}
-          onChange={handleInput}
-          disabled={!ready}
-          placeholder="I'll visit..."
-          id='destination'
+      {!citySelected && <>
+        <label htmlFor='destination'>Where to when we can get out again?</label>
+        <br />
+        <div>
+          <PlanInput
+            value={value}
+            onChange={handleInput}
+            disabled={!ready}
+            placeholder="I'll visit..."
+            id='destination'
+          />
+          {status === 'OK' && <SuggestionList>
+            {renderSuggestions()}
+          </SuggestionList>}
+        </div>
+        <CitySelectionMap
+          center={center}
+          handleConfirm={handleConfirm}
+          setNewCenter={setNewCenter}
+          infoVisible={infoVisible}
+          setInfoVisible={handleToggleInfoVisibility}
         />
-        {status === 'OK' && <SuggestionList>
-          {renderSuggestions()}
-        </SuggestionList>}
-      </div>
-      <CitySelectionMap
-        center={center}
-        handleCancel={() => { console.log('NO') }}
-        handleConfirm={() => { console.log('YES')}}
-        setNewCenter={setNewCenter}
-      />
-    </PlanDiv>
+      </> || <>
+        <SelectedCity name={citySelected.displayName} />
+      </>}
+      </PlanDiv>
   )
 }
 

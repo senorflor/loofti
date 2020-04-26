@@ -22,9 +22,10 @@ const updateTimestamps = (timestamps, now) => {
 
 const CitySelectionMap = ({
   center,
-  handleCancel,
   handleConfirm,
   setNewCenter,
+  infoVisible,
+  setInfoVisible,
 }) => {
   const [recentMoveTimestamps, setTimestamps]  = useState([])
   const handleMapMoved = (_, theMap) => {
@@ -39,6 +40,7 @@ const CitySelectionMap = ({
       )
       if (recentMoveTimestamps.length < 2) {
         setNewCenter(newCenter)
+        setInfoVisible(true)
       }
     }
   }
@@ -50,11 +52,19 @@ const CitySelectionMap = ({
       containerStyle={mapStyles}
       mapTypeControl={false}
       streetViewControl={false}
-      onIdle={handleMapMoved}> 
-        <InfoWindow visible={true} position={center}>
+      onIdle={handleMapMoved}>
+        <InfoWindow visible={infoVisible} position={center}>
           <>
-          <EmojiButton type='button' onClick={handleCancel}>❌ Cancel</EmojiButton> 
-          <EmojiButton type='button' onClick={handleConfirm}>✅ Let's go!</EmojiButton>
+            <EmojiButton
+              type='button'
+              onClick={() => setInfoVisible(false)}>
+              ❌ Cancel
+            </EmojiButton>
+            <EmojiButton
+              type='button'
+              onClick={handleConfirm}>
+              ✅ Let's go!
+            </EmojiButton>
           </>
         </InfoWindow>
     </Map>
