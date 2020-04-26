@@ -10,6 +10,14 @@ export const PlanDiv = styled.div`
   justify-content: center;
 `
 
+export const ExpandingDiv = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`
+
 export const PlanInput = styled.input`
   width: 300px;
   max-width: 90%;

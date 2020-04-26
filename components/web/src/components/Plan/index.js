@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete'
-import {  PlanDiv, PlanInput, SuggestionList } from './styled'
+import { ExpandingDiv, PlanDiv, PlanInput, SuggestionList } from './styled'
 import CitySelectionMap from './CitySelectionMap'
 import SelectedCity from './SelectedCity'
 
@@ -10,6 +10,32 @@ const homeSweetHome = {
 }
 
 const Plan = (props) => {
+  // Layout state/effects (big honkin workaround for insufficiency of vh-based
+  // layout on mobile)
+  const [height, setHeight] = useState(
+    document.documentElement.clientHeight
+  )
+  useEffect(() => {
+    const handleHeightChange = () => {
+      setHeight(document.documentElement.clientHeight)
+    }
+    window.addEventListener('resize', handleHeightChange)
+    window.addEventListener('orientationchange', handleHeightChange)
+    return () => {
+      window.removeEventListener('resize', handleHeightChange)
+      window.removeEventListener('orientationchange', handleHeightChange)
+    }
+  }, [])
+
+  // Form state (TODO: local storage persistence)
+  const [citySelected, setCitySelected] = useState(null)
+  const [friendsSelected, setFriendsSelected] = useState(null)
+  const [placesSelected, setPlacesSelected] = useState(null)
+
+  // Map state and effects
+  const mapRef = useRef(null)
+  const [infoVisible, setInfoVisible] = useState(null)
+  const [center, setCenter] = useState(homeSweetHome)
   const {
     ready,
     value,
@@ -24,30 +50,6 @@ const Plan = (props) => {
     },
     debounce: 333,
   })
-
-  const [center, setCenter] = useState(homeSweetHome)
-
-  const [height, setHeight] = useState(
-    document.documentElement.clientHeight
-  )
-
-  const mapRef = useRef(null)
-  const [infoVisible, setInfoVisible] = useState(null)
-  const [citySelected, setCitySelected] = useState(null)
-  const [friendsSelected, setFriendsSelected] = useState(null)
-
-  useEffect(() => {
-    const handleHeightChange = () => {
-      setHeight(document.documentElement.clientHeight)
-    }
-    window.addEventListener('resize', handleHeightChange)
-    window.addEventListener('orientationchange', handleHeightChange)
-    return () => {
-      window.removeEventListener('resize', handleHeightChange)
-      window.removeEventListener('orientationchange', handleHeightChange)
-    }
-  }, [])
-
   const geoService = useRef()
   useEffect(() => {
     const getClosestCity = () => {
@@ -64,13 +66,13 @@ const Plan = (props) => {
           const closest = res[0]
           const city = closest.address_components.filter(
             ac => ac.types.includes('locality')
-          )[0].long_name
+          )[0]?.long_name || 'Lawrence'
           const state = closest.address_components.filter(
             ac => ac.types.includes('administrative_area_level_1')
-          )[0].short_name
+          )[0]?.short_name || 'KS'
           const nation = closest.address_components.filter(
             ac => ac.types.includes('country')
-          )[0].long_name
+          )[0]?.long_name || 'USA'
           geoService.current.geocode({
             address: `${city}, ${state}, ${nation}`,
           }, (res) => {
@@ -92,6 +94,7 @@ const Plan = (props) => {
     getClosestCity()
   }, [center])
 
+  // Map handlers
   const handleToggleInfoVisibility = (isVisible) => {
     setInfoVisible(isVisible)
   }
@@ -126,6 +129,7 @@ const Plan = (props) => {
     setCenter(newCenter)
   }
 
+  // Render helpers
   const renderSuggestions = () =>
     data.map(suggestion => {
       const {
@@ -167,10 +171,14 @@ const Plan = (props) => {
           infoVisible={infoVisible}
           setInfoVisible={handleToggleInfoVisibility}
         />
-      </> || <>
-        <SelectedCity name={citySelected.displayName} />
-      </>}
-      </PlanDiv>
+      </> ||
+      <SelectedCity name={citySelected.displayName} />}
+      <ExpandingDiv>
+        <label htmlFor='friends'>Who's invited?</label>
+        <br />
+        <PlanInput id='friends'></PlanInput>
+      </ExpandingDiv>
+    </PlanDiv>
   )
 }
 

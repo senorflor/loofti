@@ -4,10 +4,11 @@ import { EmojiButton } from './styled'
 import InfoWindow from './InfoWindow'
 
 const mapStyles = {
+  flex: 1,
   position: 'relative',
   marginTop: '1rem',
   width: '80vw',
-  height: '60vh',
+  maxHeight: '60vh',
 }
 
 // Jankily ensure we don't end up in an update loop of map position because the
