@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const SelectedCity = ({ city, handleClick, className }) =>
+const SelectedFriends = ({ friends, handleClick, className }) =>
   <div onClick={handleClick} className={className}>
-    Where to: <strong>{city ? city.displayName : '??'}</strong>
+    Who's invited: <strong>{`You + ${friends.length || '??'} friends`}</strong>
   </div>
 
-const StyledSelectedCity = styled(SelectedCity)`
-  width: calc(100%);
+const StyledSelectedFriends = styled(SelectedFriends)`
+  width: 100%;
   text-align: left;
   font-size: calc(1vw + 10px);
   border-top: 1px solid #999;
@@ -21,4 +21,4 @@ const StyledSelectedCity = styled(SelectedCity)`
   }
 `
 
-export default StyledSelectedCity
+export default StyledSelectedFriends

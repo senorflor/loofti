@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete'
-import { ExpandingDiv, PlanDiv, PlanInput, SuggestionList } from './styled'
+import { ExpandingDiv, PlanDiv, PlanInput, PlanLabel, SuggestionList } from './styled'
 import CitySelectionMap from './CitySelectionMap'
 import SelectedCity from './SelectedCity'
+import SelectedFriends from './SelectedFriends'
+import SelectedPlaces from './SelectedPlaces'
 
 const homeSweetHome = {
   lat: 38.9613795,
@@ -29,11 +31,11 @@ const Plan = (props) => {
 
   // Form state (TODO: local storage persistence)
   const [citySelected, setCitySelected] = useState(null)
-  const [friendsSelected, setFriendsSelected] = useState(null)
-  const [placesSelected, setPlacesSelected] = useState(null)
+  const [friendsSelected, setFriendsSelected] = useState([])
+  const [placesSelected, setPlacesSelected] = useState([])
+  const [selectionPhase, setSelectionPhase] = useState('city')
 
-  // Map state and effects
-  const mapRef = useRef(null)
+  // City map state and effects
   const [infoVisible, setInfoVisible] = useState(null)
   const [center, setCenter] = useState(homeSweetHome)
   const {
@@ -118,11 +120,12 @@ const Plan = (props) => {
       })
   }
 
-  const handleConfirm = () => {
+  const handleCityConfirm = () => {
     setCitySelected({
       displayName: value,
       center,
     })
+    setSelectionPhase('friends')
   }
 
   const setNewCenter = (newCenter) => {
@@ -149,8 +152,8 @@ const Plan = (props) => {
 
   return (
     <PlanDiv height={height}>
-      {!citySelected && <>
-        <label htmlFor='destination'>Where to when we can get out again?</label>
+      {(selectionPhase === 'city') ? <ExpandingDiv>
+        <PlanLabel htmlFor='city'>Where to when we can get out again?</PlanLabel>
         <br />
         <div>
           <PlanInput
@@ -158,7 +161,7 @@ const Plan = (props) => {
             onChange={handleInput}
             disabled={!ready}
             placeholder="I'll visit..."
-            id='destination'
+            id='city'
           />
           {status === 'OK' && <SuggestionList>
             {renderSuggestions()}
@@ -166,18 +169,50 @@ const Plan = (props) => {
         </div>
         <CitySelectionMap
           center={center}
-          handleConfirm={handleConfirm}
+          handleConfirm={handleCityConfirm}
           setNewCenter={setNewCenter}
           infoVisible={infoVisible}
           setInfoVisible={handleToggleInfoVisibility}
         />
-      </> ||
-      <SelectedCity name={citySelected.displayName} />}
-      <ExpandingDiv>
-        <label htmlFor='friends'>Who's invited?</label>
+      </ExpandingDiv> : <SelectedCity
+        city={citySelected}
+        handleClick={() => {setSelectionPhase('city')}}
+      />}
+      {(selectionPhase === 'friends') ? <ExpandingDiv>
+        <PlanLabel htmlFor='friends'>Who's invited?</PlanLabel>
         <br />
         <PlanInput id='friends'></PlanInput>
-      </ExpandingDiv>
+        <button type='button' onClick={() => setSelectionPhase('places')}>💙</button>
+      </ExpandingDiv> : <SelectedFriends
+        friends={friendsSelected}
+        handleClick={() => { setSelectionPhase('friends') }}
+      />}
+      {(selectionPhase === 'places') ? <ExpandingDiv>
+        <PlanLabel htmlFor='places'>What places will you visit?</PlanLabel>
+        <br />
+        <div>
+          <PlanInput
+            value={value}
+            onChange={handleInput}
+            disabled={!ready}
+            placeholder="We'll head to..."
+            id='places'
+          />
+          {status === 'OK' && <SuggestionList>
+            {renderSuggestions()}
+          </SuggestionList>}
+        </div>
+        <CitySelectionMap
+          center={center}
+          handleConfirm={handleCityConfirm}
+          setNewCenter={setNewCenter}
+          infoVisible={infoVisible}
+          setInfoVisible={handleToggleInfoVisibility}
+        />
+      </ExpandingDiv> : <SelectedPlaces
+        places={placesSelected}
+        handleClick={() => {setSelectionPhase('places')}}
+      />}
     </PlanDiv>
   )
 }

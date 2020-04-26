@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const SelectedCity = ({ city, handleClick, className }) =>
+const SelectedPlaces = ({ places, handleClick, className }) =>
   <div onClick={handleClick} className={className}>
-    Where to: <strong>{city ? city.displayName : '??'}</strong>
+    We're visiting: <strong>{`${places.length || '??'} places`}</strong>
   </div>
 
-const StyledSelectedCity = styled(SelectedCity)`
-  width: calc(100%);
+const StyledSelectedPlaces = styled(SelectedPlaces)`
+  width: 100%;
   text-align: left;
   font-size: calc(1vw + 10px);
   border-top: 1px solid #999;
@@ -21,4 +21,4 @@ const StyledSelectedCity = styled(SelectedCity)`
   }
 `
 
-export default StyledSelectedCity
+export default StyledSelectedPlaces
