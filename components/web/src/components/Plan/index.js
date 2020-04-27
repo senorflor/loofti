@@ -34,7 +34,7 @@ const Plan = (props) => {
   const [placesSelected, setPlacesSelected] = useState([])
   const [selectionPhase, setSelectionPhase] = useState('city')
 
-  // City map state and effects
+  // City map state and effects (TODO: extract into wrapper hook)
   const [infoVisible, setInfoVisible] = useState(null)
   const [center, setCenter] = useState(homeSweetHome)
   const {
