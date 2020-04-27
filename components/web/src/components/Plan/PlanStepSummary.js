@@ -1,12 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const SelectedCity = ({ city, handleClick, className }) =>
+const PlanStepSummary = ({
+  caption,
+  content,
+  handleClick,
+  className, // for styled-components wrapper to apply
+}) =>
   <div onClick={handleClick} className={className}>
-    Where to: <strong>{city ? city.displayName : '??'}</strong>
+    {caption}: <strong>{content || '??'}</strong>
   </div>
 
-const StyledSelectedCity = styled(SelectedCity)`
+const StyledPlanStepSummary = styled(PlanStepSummary)`
   width: calc(100%);
   text-align: left;
   font-size: calc(1vw + 10px);
@@ -21,4 +26,4 @@ const StyledSelectedCity = styled(SelectedCity)`
   }
 `
 
-export default StyledSelectedCity
+export default StyledPlanStepSummary

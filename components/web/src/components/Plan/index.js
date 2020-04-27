@@ -5,6 +5,7 @@ import CitySelectionMap from './CitySelectionMap'
 import SelectedCity from './SelectedCity'
 import SelectedFriends from './SelectedFriends'
 import SelectedPlaces from './SelectedPlaces'
+import PlanStepSummary from './PlanStepSummary'
 
 const homeSweetHome = {
   lat: 38.9613795,
@@ -174,8 +175,9 @@ const Plan = (props) => {
           infoVisible={infoVisible}
           setInfoVisible={handleToggleInfoVisibility}
         />
-      </ExpandingDiv> : <SelectedCity
-        city={citySelected}
+      </ExpandingDiv> : <PlanStepSummary
+        caption='Where to: '
+        content={citySelected?.displayName}
         handleClick={() => {setSelectionPhase('city')}}
       />}
       {(selectionPhase === 'friends') ? <ExpandingDiv>
@@ -183,8 +185,9 @@ const Plan = (props) => {
         <br />
         <PlanInput id='friends'></PlanInput>
         <button type='button' onClick={() => setSelectionPhase('places')}>💙</button>
-      </ExpandingDiv> : <SelectedFriends
-        friends={friendsSelected}
+      </ExpandingDiv> : <PlanStepSummary
+        caption="Who's invited: "
+        content={friendsSelected?.length && `You + ${friendsSelected.length} friends`}
         handleClick={() => { setSelectionPhase('friends') }}
       />}
       {(selectionPhase === 'places') ? <ExpandingDiv>
@@ -209,8 +212,9 @@ const Plan = (props) => {
           infoVisible={infoVisible}
           setInfoVisible={handleToggleInfoVisibility}
         />
-      </ExpandingDiv> : <SelectedPlaces
-        places={placesSelected}
+      </ExpandingDiv> : <PlanStepSummary
+        caption="We're visiting: "
+        content={placesSelected?.length && `${placesSelected.length} places`}
         handleClick={() => {setSelectionPhase('places')}}
       />}
     </PlanDiv>
