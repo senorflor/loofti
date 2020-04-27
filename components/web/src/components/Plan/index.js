@@ -194,17 +194,34 @@ const Plan = (props) => {
         />
       </ExpandingDiv> : <PlanStepSummary
         caption='Where to: '
-        content={citySelected?.displayName}
+        content={citySelected?.displayName && `${citySelected.displayName}\xa0\xa0✅`}
         handleClick={() => {setSelectionPhase('city')}}
       />}
       {(selectionPhase === 'friends') ? <ExpandingDiv>
         <PlanLabel htmlFor='friends'>Who's invited?</PlanLabel>
         <br />
-        <PlanInput id='friends'></PlanInput>
+        <fieldset id='friends'>
+          {friendsSelected?.length ?
+            friendsSelected.map((f, i) =>
+              <React.Fragment key={f.name + f.contact}>
+                <PlanLabel htmlFor={`name${i}`}>Name</PlanLabel>
+                <input type='text' id={`name${i}`}></input>
+                <PlanLabel htmlFor={`contact${i}`}>Email or Phone #</PlanLabel>
+                <input type='text' id={`contact${i}`}></input>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <PlanLabel htmlFor='name1'>Name</PlanLabel>
+                <input type='text' id='name1'></input>
+                <PlanLabel htmlFor='contact1'>Email or Phone #</PlanLabel>
+                <input type='text' id='contact1'></input>
+              </React.Fragment>
+            )}
+        </fieldset>
         <button type='button' onClick={() => setSelectionPhase('places')}>💙</button>
       </ExpandingDiv> : <PlanStepSummary
         caption="Who's invited: "
-        content={friendsSelected?.length && `You + ${friendsSelected.length} friends`}
+        content={friendsSelected?.length && `You + ${friendsSelected.length} friends\xa0\xa0✅`}
         handleClick={() => { setSelectionPhase('friends') }}
       />}
       {(selectionPhase === 'places') ? <ExpandingDiv>
@@ -231,7 +248,7 @@ const Plan = (props) => {
         />
       </ExpandingDiv> : <PlanStepSummary
         caption="We're visiting: "
-        content={placesSelected?.length && `${placesSelected.length} places`}
+        content={placesSelected?.length && `${placesSelected.length} places\xa0\xa0✅`}
         handleClick={() => {setSelectionPhase('places')}}
       />}
     </PlanDiv>
