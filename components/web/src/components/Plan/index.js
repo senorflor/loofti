@@ -11,7 +11,8 @@ const homeSweetHome = {
 
 const Plan = (props) => {
   // Layout state/effects (big honkin workaround for insufficiency of vh-based
-  // layout on mobile)
+  // layout on mobile for this particular layout impl [calc'd non-100% because
+  // header])
   const [height, setHeight] = useState(
     document.documentElement.clientHeight
   )
