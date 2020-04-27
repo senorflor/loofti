@@ -2,9 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete'
 import { ExpandingDiv, PlanDiv, PlanInput, PlanLabel, SuggestionList } from './styled'
 import CitySelectionMap from './CitySelectionMap'
-import SelectedCity from './SelectedCity'
-import SelectedFriends from './SelectedFriends'
-import SelectedPlaces from './SelectedPlaces'
 import PlanStepSummary from './PlanStepSummary'
 
 const homeSweetHome = {
