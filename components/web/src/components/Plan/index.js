@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete'
 import { ExpandingDiv, PlanDiv, PlanInput, PlanLabel, SuggestionList } from './styled'
 import CitySelectionMap from './CitySelectionMap'
+import PlacesSelectionMap from './PlacesSelectionMap'
 import PlanStepSummary from './PlanStepSummary'
 
 const homeSweetHome = {
@@ -36,7 +37,8 @@ const Plan = (props) => {
 
   // City map state and effects (TODO: extract into wrapper hook)
   const [infoVisible, setInfoVisible] = useState(null)
-  const [center, setCenter] = useState(homeSweetHome)
+  const [cityCenter, setCityCenter] = useState(homeSweetHome)
+  const [placesCenter, setPlacesCenter] = useState(homeSweetHome)
   const {
     ready,
     value,
@@ -57,11 +59,11 @@ const Plan = (props) => {
       if (!geoService.current) {
         geoService.current = new window.google.maps.Geocoder
       }
-      if (center == homeSweetHome) {
+      if (cityCenter == homeSweetHome) {
         return
       }
       geoService.current.geocode({
-        location: center,
+        location: cityCenter,
       }, (res) => {
         if (res?.length) {
           const closest = res[0]
@@ -93,9 +95,9 @@ const Plan = (props) => {
       })
     }
     getClosestCity()
-  }, [center])
+  }, [cityCenter])
 
-  // Map handlers
+  // City Map handlers
   const handleToggleInfoVisibility = (isVisible) => {
     setInfoVisible(isVisible)
   }
@@ -112,7 +114,7 @@ const Plan = (props) => {
     getGeocode({ address: description })
       .then(results => getLatLng(results[0]))
       .then((coords) => {
-        setCenter(coords)
+        setCityCenter(coords)
         setInfoVisible(true)
       }).catch(error => {
         console.log('Error geolocating: ', error)
@@ -122,14 +124,31 @@ const Plan = (props) => {
   const handleCityConfirm = () => {
     setCitySelected({
       displayName: value,
-      center,
+      cityCenter,
     })
+    setPlacesCenter(cityCenter) // Update Places map center for convenience
     setSelectionPhase('friends')
   }
 
-  const setNewCenter = (newCenter) => {
-    setCenter(newCenter)
+  const setNewCityCenter = (newCenter) => {
+    setCityCenter(newCenter)
   }
+
+  // Places map state and effects
+  const {
+    ready: placesReady,
+    value: placesValue,
+    suggestions: { status: placesStatus, data: placesData },
+    setValue: setPlacesValue,
+    clearSuggestions: clearPlacesSuggestions,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      types: [
+        '(cities)'
+      ]
+    },
+    debounce: 333,
+  })
 
   // Render helpers
   const renderSuggestions = () =>
@@ -167,9 +186,9 @@ const Plan = (props) => {
           </SuggestionList>}
         </div>
         <CitySelectionMap
-          center={center}
+          center={cityCenter}
           handleConfirm={handleCityConfirm}
-          setNewCenter={setNewCenter}
+          setNewCenter={setNewCityCenter}
           infoVisible={infoVisible}
           setInfoVisible={handleToggleInfoVisibility}
         />
@@ -203,10 +222,10 @@ const Plan = (props) => {
             {renderSuggestions()}
           </SuggestionList>}
         </div>
-        <CitySelectionMap
-          center={center}
+        <PlacesSelectionMap
+          center={placesCenter}
           handleConfirm={handleCityConfirm}
-          setNewCenter={setNewCenter}
+          setNewCenter={setNewCityCenter}
           infoVisible={infoVisible}
           setInfoVisible={handleToggleInfoVisibility}
         />
